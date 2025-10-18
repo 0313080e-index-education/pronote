@@ -12,7 +12,7 @@
         function promptForBirthdate() {
             let birthDate;
             while (true) {
-                birthDate = prompt("Saisissez votre date de naissance en utilisant ce format (JJ/MM/AAAA):");
+                birthDate = prompt("Saisissez votre date de naissance en utilisant ce format (JJMMAAAA):");
                 if (birthDate === null) {
                     alert(cancelMessage);
                     setTimeout(promptForBirthdate, 0);
